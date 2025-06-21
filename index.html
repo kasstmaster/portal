@@ -1,290 +1,801 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- Head Section: sets metadata, styling, and page title -->
 <head>
-  <meta charset="UTF-8" />
-  <title>Client Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #121212;
-      color: #fff;
-      padding: 20px;
-    }
-    select, input, textarea, button {
-      font-family: inherit;
-      border-radius: 4px;
-      border: 1px solid #444;
-      background-color: #1e1e1e;
-      color: #eee;
-      padding: 6px;
-      margin: 4px 0;
-    }
-    h1, h2, h3 {
-      margin: 0;
-      text-align: center;
-    }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .col {
-      flex: 1;
-      min-width: 300px;
-    }
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-    .entry {
-      background: #1e1e1e;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-    }
-    .entry .controls {
-      float: right;
-    }
-    .entry textarea {
-      width: 100%;
-      resize: vertical;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title id="pageTitle">Clients</title>
+
+<!-- Styles: dark mode layout, form elements, buttons, layout blocks -->
+<style>
+body {
+background-color: #121212;
+color: #eee;
+font-family: sans-serif;
+padding: 20px; }
+
+#titleInput {
+background: transparent;
+color: #fff;
+font-size: 1.8em;
+border: none;
+border-bottom: 1px solid #444;
+width: 100%;
+margin-bottom: 0px;
+text-align: center; }
+
+input[type="text"] {
+background: #1e1e1e;
+border: 1px solid #444;
+color: #eee;
+padding: 8px;
+margin-right: 10px;
+border-radius: 4px;
+flex: unset;
+width: 150px;
+box-sizing: border-box; }
+
+#labelInput { flex: unset; width: 195px; }
+#urlInput { flex: unset; width: 195px; }
+#todoInput { flex: unset; width: 400px; }
+#businessInput { flex: unset; width: 400px; }
+
+.delete-btn {
+padding: 3px 7px;
+font-size: 12px;
+background: #121212;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+opacity: 0.85;
+transition: opacity 0.2s;}
+
+.task-delete-btn {
+background: #121212;
+color: white;
+padding: 2px 6px;
+font-size: 12px;
+border-radius: 6px;
+margin-left: 10px;
+cursor: pointer;}
+
+button {
+padding: 8px 14px;
+background: linear-gradient(to right, #4e4376, #2b5876);
+color: white;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+font-size: 12px;
+margin: 4px 0; }
+
+a.button {
+display: inline-block;
+background: #1e1e1e;
+color: white;
+font-size: 13px;
+text-decoration: none;
+text-align: center;
+padding: 8px 14px;
+border-radius: 6px;
+width: 180px;
+box-sizing: border-box;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+position: relative;
+z-index: 1; }
+
+a.button:hover { background: #1e1e1e; }
+
+.link-buttons {
+position: absolute;
+top: -25px;
+left: 50%;
+transform: translateX(-50%);
+display: none;
+gap: 0px;
+justify-content: center;
+z-index: 2; }
+
+.link-entry:hover .link-buttons { display: flex; }
+
+.link-row { display: flex; align-items: flex-start; }
+.link-list {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 30px; }
+
+.link-entry {
+position: relative;
+display: inline-block;
+margin-bottom: 12px; }
+
+.business-list {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 10px; }
+
+.business-entry {
+display: flex;
+flex-direction: column;
+align-items: stretch;
+background: #1e1e1e;
+padding: 10px;
+border-radius: 6px;
+min-width: 140px;
+width: fit-content; }
+
+.business-entry span {
+color: white;
+font-weight: bold; }
+
+.business-note {
+background: #2a2a2a;
+color: white;
+border: 1px solid #2a2a2a;
+border-radius: 4px;
+padding: 6px;
+font-size: 12px;
+height: 200px;
+width: 100%;
+box-sizing: border-box;
+resize: vertical;
+Min-height: 200px;
+min-width: 200px; }
+
+textarea {
+background: #2a2a2a;
+color: #eee;
+border: 1px solid #333;
+border-radius: 6px;
+padding: 10px;
+margin-top: 6px;
+height: 100px;
+width: 100%;
+box-sizing: border-box;
+resize: vertical;
+Min-height: 100px;
+min-width: 100%; }
+
+.notes-container {
+background: #1e1e1e;
+padding: 10px;
+border-radius: 6px;
+margin-top: 10px;
+width: 100%; }
+</style>
 </head>
+
+
+
+
+<!-- Main page layout and interactive logic -->
 <body>
 
-  <div>
-    <label for="clientSelect">Select Client:</label>
-    <select id="clientSelect"></select>
-  </div>
 
-  <div id="clientInfo" style="text-align:center; margin-top:20px;">
-    <h1 id="clientTitle">(loading...)</h1>
-    <div id="clientPhone"></div>
-    <div id="clientEmail"></div>
-    <div id="clientAddress" style="margin-top: 5px;"></div>
-  </div>
+<div id="client-controls" style="margin-bottom: 20px;">
+  <label for="client-select">Select Client:</label>
+  <select id="client-select"></select>
+</div>
+<div id="clientTitle" style="text-align: center; font-size: 1.8em; font-weight: bold; margin-top: 10px;">
+  (loading...)
+</div>
+<div id="contactContainer" style="text-align: center; margin-top: 6px;">
+  <div id="phone" style="color: #aaa;">(loading...)</div>
+  <div id="email" style="color: #aaa;">(loading...)</div>
+</div>
+<div id="addressContainer" style="margin-top: 10px; text-align: center;">
+  <div id="address" style="font-weight: bold; color: #fff; margin-top: 4px;">(loading...)</div>
+</div>
 
-  <div class="row">
-    <!-- Left column: Notes + Links -->
-    <div class="col">
-      <label>Notes</label>
-      <textarea id="notes" rows="8" placeholder="Write notes about this client..."></textarea>
 
-      <h3>Links</h3>
-      <div id="links"></div>
-    </div>
+<!-- Main flex container: left = notes + business, right = inputs + todos -->
+<div style="display: flex; gap: 40px; align-items: flex-start; margin-bottom: 20px;">
 
-    <!-- Right column: Buttons, inputs, tasks -->
-    <div class="col">
-      <div class="buttons">
-        <button onclick="toggleInput('link')">Add Link</button>
-        <button onclick="toggleInput('business')">Add Business</button>
-        <button onclick="toggleInput('task')">Add Task</button>
-      </div>
+<!-- Left column: Business list + Notes + Links -->
+<div style="flex: auto;">
+<div class="business-list" id="businessList"></div>
+<div class="notes-container">
+<label for="notes" style="display:block; margin-bottom:6px;">Notes</label>
+<textarea id="notes" placeholder="Write notes about this client..."></textarea>
+</div>
+<div class="link-list" id="linkList" style="margin-top: 20px;"></div>
+</div>
 
-      <div id="linkInput" class="hidden">
-        <input type="text" id="linkLabel" placeholder="Link label">
-        <input type="text" id="linkUrl" placeholder="https://example.com">
-        <button onclick="addLink()">Save Link</button>
-      </div>
+<!-- Right column: Add buttons + input groups + todo list -->
+<div style="width: 460px; display: flex; flex-direction: column; gap: 10px;">
 
-      <div id="businessInput" class="hidden">
-        <input type="text" id="bizName" placeholder="Business name">
-        <textarea id="bizNote" placeholder="Business notes..."></textarea>
-        <button onclick="addBusiness()">Save Business</button>
-      </div>
+<!-- Button row: toggles for each input section + backup controls -->
+<div class="link-row" style="gap:10px; flex-wrap: wrap; margin-top: 5px;">
+<button onclick="toggleInput('link')">Add Link</button>
+<button onclick="toggleInput('business')">Add Business</button>
+<button onclick="toggleInput('task')">Add Task</button>
+<button id="send-deliverables">Send Deliverables</button>
+<button onclick="saveToSheets()">Save</button>
+<input type="file" id="backupFile" accept=".json" style="display:none" onchange="loadBackup(event)"/>
+<button onclick="document.getElementById('backupFile').click()">Restore</button>
+</div>
 
-      <div id="taskInput" class="hidden">
-        <input type="text" id="taskText" placeholder="Task description">
-        <button onclick="addTask()">Save Task</button>
-      </div>
+<!-- Input Groups (hidden until toggled) -->
+<div id="linkInputGroup" class="input-group" style="display:none;">
+<input type="text" id="labelInput" placeholder="Link Label (e.g. Dropbox)" onkeydown="handleEnter(event, 'addLink')"/>
+<input type="text" id="urlInput" placeholder="https://example.com" onkeydown="handleEnter(event, 'addLink')"/>
+<button onclick="addLink()">Add</button>
+</div>
 
-      <h3>Tasks</h3>
-      <div id="tasks"></div>
+<div id="businessInputGroup" class="input-group" style="display:none;">
+<input type="text" id="businessInput" placeholder="Add a business..." onkeydown="handleEnter(event, 'addBusiness')"/>
+<button onclick="addBusiness()">Add</button>
+</div>
 
-      <h3>Businesses</h3>
-      <div id="businesses"></div>
-    </div>
-  </div>
+<div id="taskInputGroup" class="input-group" style="display:none;">
+<input type="text" id="todoInput" placeholder="Add a task..." onkeydown="handleEnter(event, 'addTodo')"/>
+<button onclick="addTodo()">Add</button>
+</div>
 
+<!-- Todo list section -->
+<div id="todoContainer">
+<ul id="todoList" style="list-style:none; padding-left:0; width:460px;"></ul>
+</div>
+
+</div>
+</div>
+
+<!-- Extra spacing container to balance bottom layout -->
+<div style="display:flex; gap:40px; align-items:flex-start; margin-bottom:40px;">
+<div style="flex:2;"></div>
+<div style="flex:1;">
+<div id="todoContainer">
+<ul id="todoList" style="list-style:none; padding-left:0;"></ul>
+</div>
+</div>
+</div>
+
+<!-- Scripts are below this line (will annotate separately if needed) -->
 <script>
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyxUXJourLcFgUPMyBfSNfG70RGsKogz_YV3GRfx6d_u2rLsBvAWYPxCSkNqx91HbIV/exec";
-let currentClient = null;
-let dataStore = { links: [], businesses: [], todos: [], notes: "" };
+const webAppURL = "https://script.google.com/macros/s/AKfycbyxUXJourLcFgUPMyBfSNfG70RGsKogz_YV3GRfx6d_u2rLsBvAWYPxCSkNqx91HbIV/exec";
 
-function toggleInput(type) {
-  ['link', 'business', 'task'].forEach(t => {
-    document.getElementById(t + 'Input').classList.add('hidden');
+let isInitialLoad = true;
+
+let clients = []; // Store all client data
+let activeClientId = null;
+
+const titleKey     = (id) => `${id}_title`;
+const notesKey     = (id) => `${id}_notes`;
+const linksKey     = (id) => `${id}_links`;
+const prefsKey     = (id) => `${id}_prefs`; // optional
+const todosKey     = (id) => `${id}_todos`;
+const addressKey   = (id) => `${id}_address`;
+const emailKey     = (id) => `${id}_email`;
+const phoneKey     = (id) => `${id}_phone`;
+const bizKey       = (id) => `${id}_businesses`;
+
+
+function saveToSheets(force = false) {
+  console.log("🟡 saveToSheets() triggered", { isInitialLoad, force });
+  if (isInitialLoad && !force) return;
+
+  const payload = {
+    clientId: activeClientId,
+    notes: notes.value,
+    links: links,
+    todos: todos,
+    businesses: businesses
+  };
+
+  fetch(webAppURL, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.text())
+  .then(result => {
+    console.log("✅ Saved to Google Sheets:", result);
+  })
+  .catch(err => {
+    console.error("❌ Save failed:", err);
   });
-  document.getElementById(type + 'Input').classList.toggle('hidden');
 }
 
-function populateClientDropdown(clients) {
-  const select = document.getElementById('clientSelect');
-  clients.forEach(c => {
-    const option = document.createElement('option');
-    option.value = c.clientId;
-    option.textContent = `${c.clientId} – ${c.name}`;
+
+function loadFromGoogleSheets() {
+  fetch(`${webAppURL}?clientId=${activeClientId}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("📦 Data from Google Sheets:", data);
+      
+      if (data.title) {
+  clientTitle.textContent = data.title;
+  localStorage.setItem(titleKey, data.title);
+  pageTitle.textContent = data.title;
+}
+
+if (data.phone) {
+  document.getElementById("phone").textContent = data.phone;
+  localStorage.setItem(`${activeClientId}_phone`, data.phone);
+}
+
+if (data.email) {
+  document.getElementById("email").textContent = data.email;
+  localStorage.setItem(`${activeClientId}_email`, data.email);
+}
+
+console.log("📧 Email element:", document.getElementById("email"));
+console.log("📞 Phone element:", document.getElementById("phone"));
+console.log("📧 Email in data:", data.email);
+console.log("📞 Phone in data:", data.phone);
+
+      if (data.notes) {
+        notes.value = data.notes;
+        localStorage.setItem(notesKey, data.notes);
+      }
+
+      if (data.address) {
+        document.getElementById("address").textContent = data.address;
+        localStorage.setItem(addressKey, data.address);
+      }
+
+      if (Array.isArray(data.links)) {
+        localStorage.setItem(linksKey, JSON.stringify(data.links));
+        links = data.links;
+        redrawLinks();
+      }
+
+      if (Array.isArray(data.todos)) {
+        localStorage.setItem(todosKey, JSON.stringify(data.todos));
+        todos = data.todos;
+        redrawTodos();
+      }
+
+      if (Array.isArray(data.businesses)) {
+        localStorage.setItem(bizKey, JSON.stringify(data.businesses));
+        businesses = data.businesses;
+        redrawBusinesses();
+      }
+
+isInitialLoad = false;
+
+    })
+    .catch(err => console.error("❌ Failed to load from Google Sheets:", err));
+}
+
+// Initialize title field
+const clientTitle = document.getElementById("clientTitle");
+const pageTitle = document.getElementById("pageTitle");
+const savedTitle = localStorage.getItem(titleKey);
+clientTitle.textContent = savedTitle || "(loading...)";
+pageTitle.textContent = savedTitle || "Clients";
+
+// Initialize notes field
+const notes = document.getElementById("notes");
+notes.value = localStorage.getItem(notesKey) || "";
+notes.addEventListener("input", () => {
+localStorage.setItem(notesKey, notes.value);
+if (!isInitialLoad) saveToSheets();
+});
+
+// Load and display saved links
+const linkList = document.getElementById("linkList");
+let links = JSON.parse(localStorage.getItem(linksKey) || "[]");
+links.forEach((link, index) => addLinkElement(link, index));
+
+// Add a new link
+function addLink() {
+const label = document.getElementById("labelInput").value.trim();
+const url = document.getElementById("urlInput").value.trim();
+if (!label || !url) return;
+const newLink = { label, url };
+links.push(newLink);
+localStorage.setItem(linksKey, JSON.stringify(links));
+if (!isInitialLoad) saveToSheets();
+addLinkElement(newLink, links.length - 1);
+document.getElementById("labelInput").value = "";
+document.getElementById("urlInput").value = "";
+}
+
+// Display a link element with edit/delete
+function addLinkElement(link, index) {
+const wrapper = document.createElement("div");
+wrapper.className = "link-entry";
+const a = document.createElement("a");
+a.href = link.url;
+a.target = "_blank";
+a.textContent = link.label;
+a.className = "button";
+const del = document.createElement("button");
+del.textContent = "✕";
+del.className = "delete-btn";
+del.onclick = () => {
+if (confirm("Are you sure you want to delete this link?")) {
+links.splice(index, 1);
+localStorage.setItem(linksKey, JSON.stringify(links));
+if (!isInitialLoad) saveToSheets();
+wrapper.remove();
+redrawLinks();
+}};
+const edit = document.createElement("button");
+edit.textContent = "✎";
+edit.className = "delete-btn";
+edit.onclick = () => {
+const newLabel = prompt("Edit label:", link.label);
+const newUrl = prompt("Edit URL:", link.url);
+if (newLabel && newUrl) {
+links[index].label = newLabel;
+links[index].url = newUrl;
+localStorage.setItem(linksKey, JSON.stringify(links));
+if (!isInitialLoad) saveToSheets();
+redrawLinks();
+}};
+wrapper.style.display = "flex";
+wrapper.style.flexDirection = "column";
+wrapper.style.alignItems = "flex-start";
+wrapper.style.gap = "4px";
+const btnGroup = document.createElement("div");
+btnGroup.className = "link-buttons";
+btnGroup.appendChild(edit);
+btnGroup.appendChild(del);
+wrapper.appendChild(btnGroup);
+wrapper.appendChild(a);
+linkList.appendChild(wrapper);
+}
+
+function redrawLinks() {
+linkList.innerHTML = "";
+links.forEach((link, index) => addLinkElement(link, index));
+}
+
+// Todo logic
+const todoList = document.getElementById("todoList");
+let todos = JSON.parse(localStorage.getItem(todosKey) || "[]");
+todos.forEach((item, index) => addTodoElement(item, index));
+
+function addTodo() {
+const input = document.getElementById("todoInput");
+const text = input.value.trim();
+if (!text) return;
+todos.push(text);
+localStorage.setItem(todosKey, JSON.stringify(todos));
+if (!isInitialLoad) saveToSheets();
+addTodoElement(text, todos.length - 1);
+input.value = "";
+}
+
+function addTodoElement(text, index) {
+const li = document.createElement("li");
+li.style.display = "flex";
+li.style.alignItems = "center";
+li.style.justifyContent = "space-between";
+li.style.padding = "4px 0";
+const label = document.createElement("label");
+label.style.display = "flex";
+label.style.alignItems = "center";
+label.style.gap = "8px";
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+const span = document.createElement("span");
+span.textContent = text;
+label.appendChild(checkbox);
+label.appendChild(span);
+const btn = document.createElement("button");
+btn.textContent = "✕";
+btn.className = "task-delete-btn";
+btn.onclick = () => {
+if (confirm("Are you sure you want to delete this task?")) {
+todos.splice(index, 1);
+localStorage.setItem(todosKey, JSON.stringify(todos));
+if (!isInitialLoad) saveToSheets();
+li.remove();
+redrawTodos();
+}};
+li.appendChild(label);
+li.appendChild(btn);
+todoList.appendChild(li);
+}
+
+function redrawTodos() {
+todoList.innerHTML = "";
+todos.forEach((item, index) => addTodoElement(item, index));
+}
+
+// Backup to .json file
+function saveBackup() {
+const data = {
+title: localStorage.getItem(titleKey),
+notes: localStorage.getItem(notesKey),
+links: JSON.parse(localStorage.getItem(linksKey) || "[]"),
+todos: JSON.parse(localStorage.getItem(todosKey) || "[]")
+};
+const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+const now = new Date();
+const year = now.getFullYear();
+const month = (now.getMonth() + 1).toString().padStart(2, '0');
+const day = now.getDate().toString().padStart(2, '0');
+let hours = now.getHours();
+const minutes = now.getMinutes().toString().padStart(2, '0');
+const ampm = hours >= 12 ? 'P' : 'A';
+hours = hours % 12;
+hours = hours ? hours : 12;
+const timeStr = `${hours}-${minutes}`;
+const filename = `${activeClientId}_${year}-${month}-${day}_${timeStr}${ampm}_backup.json`;
+a.download = filename;
+a.click();
+}
+
+// Load backup .json file
+function loadBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.title) {
+        clientTitle.textContent = data.title;
+        localStorage.setItem(titleKey, data.title);
+        pageTitle.textContent = data.title;
+      }
+      if (data.notes) {
+        localStorage.setItem(notesKey, data.notes);
+        notes.value = data.notes;
+      }
+      if (Array.isArray(data.links)) {
+        localStorage.setItem(linksKey, JSON.stringify(data.links));
+        links = data.links;
+        redrawLinks();
+      }
+      if (Array.isArray(data.todos)) {
+        localStorage.setItem(todosKey, JSON.stringify(data.todos));
+        todos = data.todos;
+        redrawTodos();
+      }
+
+      // ✅ ADD THIS INSIDE try block after data is fully loaded
+      saveToSheets();
+
+    } catch (err) {
+      alert("Invalid backup file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function fetchAllClients() {
+  console.log("⏬ Calling fetchAllClients...");
+  try {
+    const response = await fetch(`${webAppURL}?action=listClients`);
+    const data = await response.json();
+    console.log("✅ Clients loaded:", data);
+
+    clients = data.records.sort((a, b) => parseInt(a.clientId) - parseInt(b.clientId));
+    populateDropdown(clients);
+    if (clients.length > 0) loadClient(clients[0].clientId);
+  } catch (err) {
+    console.error("❌ Failed to fetch clients:", err);
+    alert("Error loading client list");
+  }
+}
+
+
+function populateDropdown(clients) {
+  console.log("🟣 Populating dropdown with:", clients);
+
+  const select = document.getElementById("client-select");
+  select.innerHTML = "";
+  clients.forEach(client => {
+    const option = document.createElement("option");
+    option.value = client.clientId;
+    option.textContent = `${client.clientId} – ${client.name}`;
     select.appendChild(option);
   });
-  select.addEventListener('change', () => {
-    loadClient(select.value);
-  });
+
+  if (!select.dataset.bound) {
+    select.addEventListener("change", (e) => {
+      console.log("🔁 Changed to client:", e.target.value);
+      loadClient(e.target.value);
+    });
+    select.dataset.bound = "true";
+  }
 }
 
+
 function loadClient(clientId) {
-  fetch(`${BASE_URL}?clientId=${clientId}`)
-    .then(res => res.json())
+  activeClientId = clientId;
+  fetch(`${webAppURL}?clientId=${clientId}`)
+    .then(response => response.json())
     .then(data => {
-      currentClient = clientId;
-      document.getElementById("clientTitle").textContent = data.title || "(untitled)";
-      document.getElementById("clientPhone").textContent = data.phone || "";
-      document.getElementById("clientEmail").textContent = data.email || "";
-      document.getElementById("clientAddress").textContent = data.address || "";
+      if (data.title) {
+        clientTitle.textContent = data.title;
+        pageTitle.textContent = data.title;
+        localStorage.setItem(`${clientId}_title`, data.title);
+      }
 
-      dataStore = {
-        links: data.links || [],
-        businesses: data.businesses || [],
-        todos: data.todos || [],
-        notes: data.notes || ""
-      };
+      if (data.phone) {
+        document.getElementById("phone").textContent = data.phone;
+        localStorage.setItem(`${clientId}_phone`, data.phone);
+      }
 
-      document.getElementById("notes").value = dataStore.notes;
-      render();
+      if (data.email) {
+        document.getElementById("email").textContent = data.email;
+        localStorage.setItem(`${clientId}_email`, data.email);
+      }
+
+      if (data.address) {
+        document.getElementById("address").textContent = data.address;
+        localStorage.setItem(`${clientId}_address`, data.address);
+      }
+
+      if (data.notes) {
+        notes.value = data.notes;
+        localStorage.setItem(`${clientId}_notes`, data.notes);
+      }
+
+      if (Array.isArray(data.links)) {
+        links = data.links;
+        localStorage.setItem(`${clientId}_links`, JSON.stringify(links));
+        redrawLinks();
+      }
+
+      if (Array.isArray(data.todos)) {
+        todos = data.todos;
+        localStorage.setItem(`${clientId}_todos`, JSON.stringify(todos));
+        redrawTodos();
+      }
+
+      if (Array.isArray(data.businesses)) {
+        businesses = data.businesses;
+        localStorage.setItem(`${clientId}_businesses`, JSON.stringify(businesses));
+        redrawBusinesses();
+      }
+
+      isInitialLoad = false;
+    })
+    .catch(err => {
+      console.error("❌ Error loading client data:", err);
+      alert("Failed to load client.");
     });
 }
 
-function render() {
-  const linkList = document.getElementById("links");
-  linkList.innerHTML = "";
-  dataStore.links.forEach((link, i) => {
-    const div = document.createElement("div");
-    div.className = "entry";
-    div.innerHTML = `
-      <strong><a href="${link.url}" target="_blank">${link.label}</a></strong>
-      <div class="controls">
-        <button onclick="editLink(${i})">✎</button>
-        <button onclick="deleteItem('links', ${i})">✕</button>
-      </div>
-    `;
-    linkList.appendChild(div);
-  });
 
-  const taskList = document.getElementById("tasks");
-  taskList.innerHTML = "";
-  dataStore.todos.forEach((task, i) => {
-    const div = document.createElement("div");
-    div.className = "entry";
-    div.innerHTML = `
-      <input type="checkbox" /> ${task}
-      <div class="controls">
-        <button onclick="editTask(${i})">✎</button>
-        <button onclick="deleteItem('todos', ${i})">✕</button>
-      </div>
-    `;
-    taskList.appendChild(div);
-  });
+document.querySelectorAll("#send-deliverables").forEach(button => {
+  button.addEventListener("click", async () => {
+    if (!activeClientId) {
+      alert("No client selected.");
+      return;
+    }
 
-  const bizList = document.getElementById("businesses");
-  bizList.innerHTML = "";
-  dataStore.businesses.forEach((biz, i) => {
-    const div = document.createElement("div");
-    div.className = "entry";
-    div.innerHTML = `
-      <strong>${biz.name}</strong>
-      <div class="controls">
-        <button onclick="editBusiness(${i})">✎</button>
-        <button onclick="deleteItem('businesses', ${i})">✕</button>
-      </div>
-      <div><textarea rows="3" onchange="updateBizNote(${i}, this.value)">${biz.note || ""}</textarea></div>
-    `;
-    bizList.appendChild(div);
-  });
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbyxUXJourLcFgUPMyBfSNfG70RGsKogz_YV3GRfx6d_u2rLsBvAWYPxCSkNqx91HbIV/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: activeClientId,
+          action: "sendDeliverables"
+        })
+      });
 
-  saveToSheets();
+      const result = await response.json();
+      if (result.success) {
+        alert("✅ Deliverables email sent!");
+      } else {
+        alert("❌ Failed to send deliverables.");
+      }
+    } catch (err) {
+      console.error("Deliverables send error:", err);
+      alert("An error occurred while sending deliverables.");
+    }
+  });
+});
+
+
+
+
+// Business section logic
+const businessList = document.getElementById("businessList");
+let businesses = JSON.parse(localStorage.getItem(bizKey) || "[]");
+businesses.forEach((biz, index) => addBusinessElement(biz, index));
+
+function addBusinessElement(biz, index) {
+const wrapper = document.createElement("div");
+wrapper.className = "business-entry";
+const header = document.createElement("div");
+header.style.display = "flex";
+header.style.justifyContent = "space-between";
+header.style.alignItems = "center";
+const title = document.createElement("span");
+title.textContent = biz.name;
+const del = document.createElement("button");
+del.textContent = "✕";
+del.className = "task-delete-btn";
+del.onclick = () => {
+if (confirm("Are you sure you want to delete this business?")) {
+businesses.splice(index, 1);
+localStorage.setItem(bizKey, JSON.stringify(businesses));
+if (!isInitialLoad) saveToSheets();
+wrapper.remove();
+redrawBusinesses();
+}};
+header.appendChild(title);
+header.appendChild(del);
+const note = document.createElement("textarea");
+note.className = "business-note";
+note.placeholder = "Post schedule, tone, branding rules...";
+note.value = biz.note || "";
+note.addEventListener("input", () => {
+  businesses[index].note = note.value;
+  localStorage.setItem(bizKey, JSON.stringify(businesses));
+if (!isInitialLoad) saveToSheets();
+});
+wrapper.appendChild(header);
+wrapper.appendChild(note);
+businessList.appendChild(wrapper);
 }
 
-function updateBizNote(index, note) {
-  dataStore.businesses[index].note = note;
-  saveToSheets();
-}
-
-function addLink() {
-  const label = document.getElementById("linkLabel").value;
-  const url = document.getElementById("linkUrl").value;
-  if (label && url) {
-    dataStore.links.push({ label, url });
-    document.getElementById("linkLabel").value = "";
-    document.getElementById("linkUrl").value = "";
-    toggleInput('link');
-    render();
-  }
-}
-
-function addTask() {
-  const text = document.getElementById("taskText").value;
-  if (text) {
-    dataStore.todos.push(text);
-    document.getElementById("taskText").value = "";
-    toggleInput('task');
-    render();
-  }
+function redrawBusinesses() {
+businessList.innerHTML = "";
+businesses.forEach((biz, index) => addBusinessElement(biz, index));
 }
 
 function addBusiness() {
-  const name = document.getElementById("bizName").value;
-  const note = document.getElementById("bizNote").value;
-  if (name) {
-    dataStore.businesses.push({ name, note });
-    document.getElementById("bizName").value = "";
-    document.getElementById("bizNote").value = "";
-    toggleInput('business');
-    render();
-  }
+const name = document.getElementById("businessInput").value.trim();
+if (!name) return;
+const newBiz = { name, note: "" };
+businesses.push(newBiz);
+localStorage.setItem(bizKey, JSON.stringify(businesses));
+if (!isInitialLoad) saveToSheets();
+addBusinessElement(newBiz, businesses.length - 1);
+document.getElementById("businessInput").value = "";
 }
 
-function deleteItem(type, index) {
-  dataStore[type].splice(index, 1);
-  render();
-}
-
-function saveToSheets() {
-  fetch(BASE_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      clientId: currentClient,
-      notes: document.getElementById("notes").value,
-      links: dataStore.links,
-      todos: dataStore.todos,
-      businesses: dataStore.businesses
-    }),
-    headers: { "Content-Type": "application/json" }
-  }).then(r => r.json())
-    .then(data => console.log("✅ Saved:", data));
-}
-
-document.getElementById("notes").addEventListener("input", () => {
-  dataStore.notes = document.getElementById("notes").value;
-  saveToSheets();
+// Enter key bindings for all input fields
+["urlInput","todoInput","labelInput","businessInput"].forEach(id => {
+document.getElementById(id).addEventListener("keydown", function(e) {
+if (e.key === "Enter") {
+e.preventDefault();
+if (id === "labelInput") document.getElementById("urlInput").focus();
+else if (id === "urlInput") addLink();
+else if (id === "todoInput") addTodo();
+else if (id === "businessInput") addBusiness();
+}});
 });
 
-// Initial client load
-fetch(`${BASE_URL}?action=listClients`)
-  .then(res => res.json())
-  .then(data => {
-    populateClientDropdown(data.records);
-    if (data.records.length > 0) {
-      loadClient(data.records[0].clientId);
-    }
-  });
+// Toggle input group visibility
+function toggleInput(type) {
+const groups = {
+link: document.getElementById("linkInputGroup"),
+business: document.getElementById("businessInputGroup"),
+task: document.getElementById("taskInputGroup")
+};
+if (groups[type].style.display === "flex") {
+groups[type].style.display = "none";
+} else {
+Object.values(groups).forEach(group => group.style.display = "none");
+groups[type].style.display = "flex";
+}
+}
+
+// Helper for Enter key form submission
+function handleEnter(event, action) {
+if (event.key === "Enter") {
+event.preventDefault();
+if (typeof window[action] === "function") {
+window[action]();
+if (action === "addLink") document.getElementById("linkInputGroup").style.display = "none";
+else if (action === "addBusiness") document.getElementById("businessInputGroup").style.display = "none";
+else if (action === "addTodo") document.getElementById("taskInputGroup").style.display = "none";
+}}}
+
+window.addEventListener("DOMContentLoaded", () => {
+  fetchAllClients(); // Load dropdown and first client
+});
+
+
 </script>
 
 </body>
