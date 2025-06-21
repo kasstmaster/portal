@@ -569,11 +569,8 @@ if (title) {
 async function fetchAllClients() {
   console.log("⏬ Calling fetchAllClients...");
   try {
-    const response = await fetch(webAppURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "listClients" })
-    });
+    const response = await fetch(`${webAppURL}?action=listClients`);
+
     const data = await response.json();
     console.log("✅ Clients loaded:", data);
 
