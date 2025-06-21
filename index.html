@@ -569,8 +569,11 @@ if (title) {
 async function fetchAllClients() {
   console.log("⏬ Calling fetchAllClients...");
   try {
-    const response = await fetch(`${webAppURL}?action=listClients`);
-
+    const response = await fetch(`${webAppURL}?action=listClients`, {
+      method: "GET",
+      mode: "cors",
+      // ⚠️ DO NOT include headers for GET or CORS will still block
+    });
     const data = await response.json();
     console.log("✅ Clients loaded:", data);
 
@@ -582,6 +585,7 @@ async function fetchAllClients() {
     alert("Error loading client list");
   }
 }
+
 
 
 function populateDropdown(clients) {
