@@ -23,10 +23,20 @@
     }
   </style>
 </head>
+
 <body>
   <iframe 
     src="https://script.google.com/macros/s/AKfycbxBjfT--gDtSNJcPUhQ9-3ME93mYdTfyVBccJLCDlBRExnTQH_EUQX9bocDdKPDLKBK/exec" 
     allow="autoplay 'none'"
   ></iframe>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service worker registered'))
+      .catch(error => console.error('❌ Service worker error:', error));
+  }
+</script>
+
 </body>
 </html>
