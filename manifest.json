@@ -1,6 +1,6 @@
 {
-  "name": "KR Client Portal",
-  "short_name": "KR Portal",
+  "name": "Client Portal",
+  "short_name": "Client Portal",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#111111",
