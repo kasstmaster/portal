@@ -22,12 +22,41 @@
 
     iframe {
       position: fixed;
-      top: 0;
+      top: 40px;
       left: 0;
       border: none;
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - 40px);
       z-index: 0;
+    }
+
+    #installBanner {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      text-align: center;
+      z-index: 9999;
+      border-bottom: 1px solid #333;
+    }
+
+    #installBanner button {
+      background: none;
+      border: none;
+      color: #7f2aab;
+      font-weight: bold;
+      margin-left: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    #installBanner button:hover {
+      text-decoration: underline;
     }
   </style>
 
@@ -36,6 +65,11 @@
 </head>
 
 <body>
+  <div id="installBanner">
+    Install this app for easy access
+    <button onclick="triggerInstall()">Install</button>
+  </div>
+
   <iframe 
     src="https://script.google.com/macros/s/AKfycbxBjfT--gDtSNJcPUhQ9-3ME93mYdTfyVBccJLCDlBRExnTQH_EUQX9bocDdKPDLKBK/exec" 
     allow="autoplay 'none'"
@@ -46,6 +80,24 @@
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log('✅ Service worker registered'))
         .catch(error => console.error('❌ Service worker error:', error));
+    }
+
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBanner').style.display = 'block';
+    });
+
+    function triggerInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          document.getElementById('installBanner').style.display = 'none';
+        });
+      }
     }
   </script>
 </body>
