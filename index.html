@@ -29,28 +29,6 @@
       height: 100vh;
       z-index: 0;
     }
-
-    #installBtn {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #a040dc, #0b0f4a); /* purple to navy gradient */
-      color: white;
-      border: none;
-      padding: 14px 20px;
-      font-size: 1rem;
-      border-radius: 14px;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-    }
-
-    #installBtn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(160, 64, 220, 0.5);
-    }
   </style>
 
   <!-- Playfair Display font -->
@@ -63,31 +41,12 @@
     allow="autoplay 'none'"
   ></iframe>
 
-  <button id="installBtn">Install App</button>
-
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log('✅ Service worker registered'))
         .catch(error => console.error('❌ Service worker error:', error));
     }
-
-    let deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const installBtn = document.getElementById('installBtn');
-      installBtn.style.display = 'block';
-
-      installBtn.addEventListener('click', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-        });
-      });
-    });
   </script>
 </body>
 </html>
