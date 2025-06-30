@@ -1,108 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="apple-touch-icon-transparent.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#28292e">
-  <meta http-equiv="Permissions-Policy" content="autoplay=(), camera=(), encrypted-media=(), fullscreen=(), geolocation=(), microphone=(), midi=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), screen-wake-lock=(), clipboard-read=(), clipboard-write=(), web-share=()">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon-transparent.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#28292e">
+<meta http-equiv="Permissions-Policy" content="autoplay=(), camera=(), encrypted-media=(), fullscreen=(), geolocation=(), microphone=(), midi=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), screen-wake-lock=(), clipboard-read=(), clipboard-write=(), web-share=()">
 
-  <title>Client Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0px;
-      height: 100%;
-      width: 100%;
-      background: #111;
-      overflow: hidden;
-    }
+<style>
+html, body {
+  margin: 0;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  background: #111;
+  overflow: hidden;
+}
 
-    iframe {
-      position: fixed;
-      top: 45px;
-      left: 0;
-      border: none;
-      width: 100vw;
-      height: calc(100vh - 40px);
-      z-index: 0;
-    }
+iframe {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  border: none;
+  width: 100vw;
+  height: calc(100vh - 40px);
+  z-index: 0;
+}
 
-    #installBanner {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #28292e;
-      color: #dcddde;
-      font-family: system-ui, sans-serif;
-      font-size: 0.9rem;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;         /* ✅ Vertically center */
-      justify-content: center;     /* ✅ Horizontally center */
-      gap: 12px;                   /* Space between text and button */
-      z-index: 9999;
-    }
+body.banner-visible iframe {
+  top: 45px;
+  height: calc(100vh - 45px);
+}
 
-    #installBanner button {
-      background: none;
-      border: none;
-      color: #7ab0f5;
-      font-family: system-ui, sans-serif;
-      font-weight: bold;
-      margin-left: 12px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
+#installBanner {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #28292e;
+  color: #dcddde;
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  display: flex;
+  text-align: center;
+  align-items: center;         /* ✅ Vertically center */
+  justify-content: center;     /* ✅ Horizontally center */
+  gap: 12px;                   /* Space between text and button */
+  z-index: 9999;
+}
 
-    #installBanner button:hover {
-      text-decoration: underline;
-    }
-  </style>
+#installBanner button {
+  background: none;
+  border: none;
+  color: #7ab0f5;
+  font-family: system-ui, sans-serif;
+  font-weight: bold;
+  margin-left: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 
-  <!-- Playfair Display font -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+#installBanner button:hover {
+  text-decoration: underline;
+}
+</style>
+
+<!-- Playfair Display font -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div id="installBanner">
-    Install this app for easy access
-    <button onclick="triggerInstall()">Install</button>
-  </div>
+<div id="installBanner">
+Install this app for easy access
+<button onclick="triggerInstall()">Install</button>
+</div>
 
-  <iframe 
-    src="https://script.google.com/macros/s/AKfycbxBjfT--gDtSNJcPUhQ9-3ME93mYdTfyVBccJLCDlBRExnTQH_EUQX9bocDdKPDLKBK/exec" 
-    allow="autoplay 'none'"
-  ></iframe>
+<iframe 
+src="https://script.google.com/macros/s/AKfycbxBjfT--gDtSNJcPUhQ9-3ME93mYdTfyVBccJLCDlBRExnTQH_EUQX9bocDdKPDLKBK/exec" 
+allow="autoplay 'none'"
+></iframe>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('✅ Service worker registered'))
-        .catch(error => console.error('❌ Service worker error:', error));
-    }
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('✅ Service worker registered'))
+    .catch(error => console.error('❌ Service worker error:', error));
+}
 
-    let deferredPrompt;
+let deferredPrompt;
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installBanner').style.display = 'block';
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'block';
+  document.body.classList.add('banner-visible');
+});
+
+function triggerInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+      document.body.classList.remove('banner-visible');
     });
-
-    function triggerInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          document.getElementById('installBanner').style.display = 'none';
-        });
-      }
-    }
-  </script>
+  }
+}
+</script>
 </body>
 </html>
