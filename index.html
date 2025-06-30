@@ -94,9 +94,21 @@ if ('serviceWorker' in navigator) {
 
 let deferredPrompt;
 
+// ✅ Check if app is already installed
+function isAppInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         window.navigator.standalone === true;
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
+  if (isAppInstalled()) {
+    console.log("🛑 App already installed. Skipping banner.");
+    return;
+  }
+
   e.preventDefault();
   deferredPrompt = e;
+
   document.getElementById('installBanner').style.display = 'block';
   document.body.classList.add('banner-visible');
 });
