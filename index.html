@@ -97,6 +97,7 @@
       e.preventDefault();
       deferredPrompt = e;
       document.getElementById('installBanner').style.display = 'block';
+document.body.classList.add('banner-visible');
     });
 
     function triggerInstall() {
@@ -107,6 +108,13 @@
           document.getElementById('installBanner').style.display = 'none';
         });
       }
+
+function isAppInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         window.navigator.standalone === true ||
+         document.referrer.startsWith('android-app://');
+}
+
     }
   </script>
 </body>
