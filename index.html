@@ -1,3 +1,7 @@
+Portal index backup 
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,17 +26,12 @@
 
     iframe {
       position: fixed;
-      top: 0px;
+      top: 45px;
       left: 0;
       border: none;
       width: 100vw;
       height: calc(100vh - 40px);
       z-index: 0;
-    }
-
-    body.banner-visible iframe {
-      top: 45px;
-      height: calc(100vh - 45px);
     }
 
     #installBanner {
@@ -97,7 +96,6 @@
       e.preventDefault();
       deferredPrompt = e;
       document.getElementById('installBanner').style.display = 'block';
-document.body.classList.add('banner-visible');
     });
 
     function triggerInstall() {
@@ -108,13 +106,6 @@ document.body.classList.add('banner-visible');
           document.getElementById('installBanner').style.display = 'none';
         });
       }
-
-function isAppInstalled() {
-  return window.matchMedia('(display-mode: standalone)').matches ||
-         window.navigator.standalone === true ||
-         document.referrer.startsWith('android-app://');
-}
-
     }
   </script>
 </body>
