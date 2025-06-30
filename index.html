@@ -97,18 +97,18 @@ let deferredPrompt;
 // ✅ Check if app is already installed
 function isAppInstalled() {
   return window.matchMedia('(display-mode: standalone)').matches ||
-         window.navigator.standalone === true;
+         window.navigator.standalone === true ||  // iOS
+         document.referrer.startsWith('android-app://');
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
   if (isAppInstalled()) {
-    console.log("🛑 App already installed. Skipping banner.");
+    console.log("🛑 App is already installed. Suppressing banner.");
     return;
   }
 
   e.preventDefault();
   deferredPrompt = e;
-
   document.getElementById('installBanner').style.display = 'block';
   document.body.classList.add('banner-visible');
 });
