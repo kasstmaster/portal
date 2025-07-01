@@ -27,6 +27,7 @@ iframe {
   border: none;
   width: 100vw;
   z-index: 0;
+  height: calc(100vh - 64px); /* 👈 Adjusted to match your fixed menu bar */
 }
 
 #installBanner {
@@ -102,15 +103,6 @@ function triggerInstall() {
     });
   }
 }
-
-function resizeIframe() {
-    const footerHeight = 64; // match your .fixed-buttons height
-    const iframe = document.querySelector('iframe');
-    iframe.style.height = (window.innerHeight - footerHeight) + 'px';
-  }
-
-  window.addEventListener('load', resizeIframe);
-  window.addEventListener('resize', resizeIframe);
   
 </script>
 </body>
