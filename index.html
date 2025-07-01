@@ -103,6 +103,14 @@ function triggerInstall() {
     });
   }
 }
+
+function setIframeHeight() {
+    const footerHeight = 64;
+    document.querySelector('iframe').style.height = (window.innerHeight - footerHeight) + 'px';
+  }
+  window.addEventListener('load', setIframeHeight);
+  window.addEventListener('resize', setIframeHeight);
+  
 </script>
 </body>
 </html>
